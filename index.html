@@ -13,6 +13,7 @@
 <button onclick="spendMoney()"> Αγορά Καφέ 5 euro</button>
 
 <script>
+ Object.freeze(JSON);
 if (!localStorage.getItem("user_wallet")) {
 const initialData = {
 userId: "USR-9942",
